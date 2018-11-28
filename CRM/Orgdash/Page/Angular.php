@@ -4,11 +4,16 @@ use CRM_Orgdash_ExtensionUtil as E;
 class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
 
   public function run() {
-    // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
-    CRM_Utils_System::setTitle(E::ts('Angular'));
+    CRM_Utils_System::setTitle(E::ts('Organization Dashboard'));
 
-    // Example: Assign a variable for use in a template
-    $this->assign('currentTime', date('Y-m-d H:i:s'));
+    // See https://docs.civicrm.org/dev/en/latest/framework/angular/loader/#other-base-pages.
+    $loader = new \Civi\Angular\AngularLoader();
+    $loader->setModules(array('orgdash'));
+    $loader->setPageName('civicrm/orgdash');
+    $loader->useApp(array(
+      'defaultRoute' => '/dash',
+    ));
+    $loader->load();
 
     parent::run();
   }

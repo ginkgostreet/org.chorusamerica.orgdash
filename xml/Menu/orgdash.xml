@@ -3,7 +3,6 @@
   <item>
     <path>civicrm/orgdash</path>
     <page_callback>CRM_Orgdash_Page_Angular</page_callback>
-    <title>Angular</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access AJAX API</access_arguments>
   </item>
 </menu>

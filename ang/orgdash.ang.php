@@ -3,7 +3,16 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
-return array (
+use CRM_Orgdash_ExtensionUtil as E;
+
+return array(
+  'ext' => E::LONG_NAME,
+  'basePages' => array('civicrm/orgdash'),
+  'requires' => array(
+    'crmUi',
+    'crmUtil',
+    'ngRoute',
+  ),
   'js' => array (
     0 => 'ang/orgdash.js',
     1 => 'ang/orgdash/*.js',
