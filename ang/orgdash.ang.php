@@ -4,21 +4,16 @@
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
 return array (
-  'js' => 
-  array (
+  'js' => array (
     0 => 'ang/orgdash.js',
     1 => 'ang/orgdash/*.js',
     2 => 'ang/orgdash/*/*.js',
   ),
-  'css' => 
-  array (
+  'css' => array (
     0 => 'ang/orgdash.css',
   ),
-  'partials' => 
-  array (
+  'partials' => array (
     0 => 'ang/orgdash',
   ),
-  'settings' => 
-  array (
-  ),
+  'settings' => array (),
 );
