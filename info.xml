@@ -20,6 +20,9 @@
   <compatibility>
     <ver>4.7</ver>
   </compatibility>
+  <requires>
+    <ext>org.civicrm.fieldmetadata</ext>
+  </requires>
   <comments>This is a new, undeveloped module</comments>
   <civix>
     <namespace>CRM/Orgdash</namespace>

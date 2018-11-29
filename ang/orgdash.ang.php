@@ -9,6 +9,7 @@ return array(
   'ext' => E::LONG_NAME,
   'basePages' => array('civicrm/orgdash'),
   'requires' => array(
+    'crmFieldMetadata',
     'crmUi',
     'crmUtil',
     'ngRoute',
