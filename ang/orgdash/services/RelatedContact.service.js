@@ -18,6 +18,12 @@
        */
       function RelatedContact (data) {
         /**
+         * @var {string}
+         *   The email address associated with the CMS account.
+         */
+        this.accountEmail = data.accountEmail;
+
+        /**
          * @var {string|number}
          */
         this.contactId = data.contactId || data.contact_id || data.id;
@@ -37,6 +43,11 @@
          *   @see RelatedContact.prototype.registerRelationship();
          */
         this.relationships = {};
+
+        /**
+         * @var {string}
+         */
+        this.sortName = data.sortName;
       }
 
       /**
@@ -82,7 +93,15 @@
           'api.Profile.get': {
             contact_id: `$value.contact_id_${otherContactIsAorB}`,
             profile_id: profileId
-          }
+          },
+          'api.UFMatch.getvalue': {
+            contact_id: `$value.contact_id_${otherContactIsAorB}`,
+            return: 'uf_name'
+          },
+          'api.Contact.getvalue': {
+            contact_id: `$value.contact_id_${otherContactIsAorB}`,
+            return: 'sort_name'
+          },
         };
         params[`contact_id_${orgIsAorB}`] = orgId;
         params[`is_permission_${orgIsAorB}_${otherContactIsAorB}`] = 1;
@@ -129,7 +148,9 @@
                 var relatedContact = contacts[relatedContactId];
               } else {
                 const contactData = {};
+                contactData.accountEmail = (typeof data['api.UFMatch.getvalue'] === 'string' ? data['api.UFMatch.getvalue'] : undefined);
                 contactData.contactId = relatedContactId;
+                contactData.sortName = (typeof data['api.Contact.getvalue'] === 'string' ? data['api.Contact.getvalue'] : undefined);
 
                 contactData.profileData = {};
                 contactData.profileData[profileId] = angular.copy(data['api.Profile.get'].values);
