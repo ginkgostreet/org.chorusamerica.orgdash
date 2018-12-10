@@ -51,6 +51,21 @@
       }
 
       /**
+       * Public convenience function for getting relationship details based on type.
+       *
+       * @param {string|number}
+       *   The relationship type ID.
+       * @return {object|undefined}
+       *   Returns undefined if no such relationship.
+       */
+      RelatedContact.prototype.getRelationshipOfType = function (id) {
+        // The CiviCRM API returns numbers as strings, so ensure this function
+        // queries for a string even if passed a number.
+        id = id.toString();
+        return _.findWhere(this.relationships, {relationship_type_id: id});
+      }
+
+      /**
        * Public method for registering new relationships in memory.
        *
        * @param {object} data
