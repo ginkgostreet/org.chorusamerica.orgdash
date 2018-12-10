@@ -192,7 +192,7 @@
          *   @see https://lodash.com/docs/3.10.1#filter
          */
         get: function (predicate) {
-          return _.filter(contacts, {});
+          return _.filter(contacts, predicate);
         }
       };
 
