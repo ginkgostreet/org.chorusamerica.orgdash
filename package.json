@@ -1,0 +1,22 @@
+{
+  "name": "org.chorusamerica.orgdash",
+  "version": "1.0.0",
+  "description": "Organization Dashboard for CiviCRM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ginkgostreet/org.chorusamerica.orgdash.git"
+  },
+  "author": "Chorus America <webmaster@chorusamerica.org>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ginkgostreet/org.chorusamerica.orgdash/issues"
+  },
+  "homepage": "https://github.com/ginkgostreet/org.chorusamerica.orgdash#readme",
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.20"
+  }
+}

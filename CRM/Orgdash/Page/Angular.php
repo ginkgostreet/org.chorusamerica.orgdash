@@ -11,9 +11,6 @@ class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
     $loader = new \Civi\Angular\AngularLoader();
     $loader->setModules(array('orgdash'));
     $loader->setPageName('civicrm/orgdash');
-    $loader->useApp(array(
-      'defaultRoute' => '/dash',
-    ));
     $loader->load();
 
     parent::run();

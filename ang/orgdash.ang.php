@@ -12,7 +12,7 @@ return array(
     'crmFieldMetadata',
     'crmUi',
     'crmUtil',
-    'ngRoute',
+    'ui.router',
   ),
   'js' => array (
     0 => 'ang/orgdash.js',
@@ -24,6 +24,7 @@ return array(
   ),
   'partials' => array (
     0 => 'ang/orgdash',
+    1 => 'ang/orgdash/partials',
   ),
   'settings' => array (),
 );
