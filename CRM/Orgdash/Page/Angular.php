@@ -28,7 +28,14 @@ class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
     // It seems inefficient to fetch *all* CiviCRM settings, but this is what
     // Civi::settings()->get() does under the hood, so we might as well do it
     // just once.
-    $allSettings = Civi::settings()->all();
+
+    // Sigh, settings fetched through the Civi interface are not deserialized...
+    // $allSettings = Civi::settings()->all();
+
+    // ... so we use the API instead.
+    $allSettings = civicrm_api3('Setting', 'get', array(
+      'sequential' => 1,
+    ))['values'][0];
 
     $extensionConfigs = array_filter($allSettings, function ($settingName) {
       return (strpos($settingName, E::SHORT_NAME . '_') === 0);
