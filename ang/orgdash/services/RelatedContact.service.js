@@ -5,10 +5,10 @@
     .factory('RelatedContactService', function ($q, crmApi) {
 
       /**
-       * @var {object}
-       *   Private bucket for related contacts, keyed by contact ID.
+       * @var {array}
+       *   Private bucket for related contacts.
        */
-      const contacts = {};
+      const contacts = [];
 
       /**
        * Constructor for the RelatedContact class.
@@ -27,9 +27,6 @@
          * @var {string|number}
          */
         this.contactId = data.contactId || data.contact_id || data.id;
-        if (typeof this.contactId === 'undefined') {
-          throw 'Cannot create RelatedContact without contact_id.';
-        }
 
         /**
          * @var {object}
@@ -128,6 +125,22 @@
        * The service itself.
        */
       return {
+
+        /**
+         * Public method for creating a new RelatedContact and adding it to the
+         * local datastore.
+         *
+         * @param {object} contactData
+         *   @see RelatedContact().
+         * @return {RelatedContact}
+         *   The newly instantiated RelatedContact.
+         */
+        add: function (contactData) {
+          const relatedContact = new RelatedContact(contactData)
+          contacts.push(relatedContact);
+          return relatedContact;
+        },
+
         /**
          * Public method for fetching related contacts from the server.
          *
@@ -159,9 +172,9 @@
               const relatedContactId = (orgId !== data.contact_id_a ? data.contact_id_a : data.contact_id_b);
 
               // the contact might already be cached, e.g., because of multiple relationships
-              if (contacts.hasOwnProperty(relatedContactId)) {
-                var relatedContact = contacts[relatedContactId];
-              } else {
+              let relatedContact = _.find(contacts, {contactId: relatedContactId});
+
+              if (!relatedContact) {
                 const contactData = {};
                 contactData.accountEmail = (typeof data['api.UFMatch.getvalue'] === 'string' ? data['api.UFMatch.getvalue'] : undefined);
                 contactData.contactId = relatedContactId;
@@ -170,7 +183,8 @@
                 contactData.profileData = {};
                 contactData.profileData[profileId] = angular.copy(data['api.Profile.get'].values);
 
-                var relatedContact = contacts[relatedContactId] = new RelatedContact(contactData);
+                relatedContact = new RelatedContact(contactData);
+                contacts.push(relatedContact);
               }
 
               // whether or not the contact had already been cached, the
