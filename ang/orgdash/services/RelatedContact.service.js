@@ -35,11 +35,10 @@
         this.profileData = angular.copy(data.profileData || {});
 
         /**
-         * @var {object}
-         *   Keyed by relationship ID.
+         * @var {array}
          *   @see RelatedContact.prototype.registerRelationship();
          */
-        this.relationships = {};
+        this.relationships = [];
 
         /**
          * @var {string}
@@ -68,11 +67,11 @@
        * @param {object} data
        */
       RelatedContact.prototype.registerRelationship = function (data) {
-        this.relationships[data.id] = {
+        this.relationships.push({
           id: data.id,
           is_active: data.is_active,
           relationship_type_id: data.relationship_type_id
-        }
+        });
       }
 
       /**

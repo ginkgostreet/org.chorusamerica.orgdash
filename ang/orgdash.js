@@ -12,27 +12,33 @@
           templateUrl: '~/orgdash/partials/Contacts.html',
           controller: 'ContactsCtrl',
           resolve: {
-            highlightedRelTypes: function (crmApi) {
-              const relTypes = CRM.vars.orgdash.orgdash_highlighted_relationship_types;
-
-              return crmApi('RelationshipType', 'get', {
-                id: {IN: relTypes}
-              }).then(function (result) {
-                return result.values;
-              });
-
-            },
             profileId: function () {
               return CRM.vars.orgdash.orgdash_single_contact_profile;
             },
-            relatedContacts: function($stateParams, RelatedContactService, profileId) {
-              const relTypes = CRM.vars.orgdash.orgdash_contacts_relationship_types;
+            relatedContacts: function($stateParams, RelatedContactService, profileId, relTypeIds) {
+              const relTypes = _.union(relTypeIds.benefits, relTypeIds.contacts, relTypeIds.highlighted);
 
               return RelatedContactService.fetch(
                 $stateParams.id,
                 relTypes,
                 profileId
               );
+            },
+            relTypeIds: function () {
+              return {
+                benefits: CRM.vars.orgdash.orgdash_benefits_relationship_types,
+                contacts: CRM.vars.orgdash.orgdash_contacts_relationship_types,
+                highlighted: CRM.vars.orgdash.orgdash_highlighted_relationship_types
+              };
+            },
+            relTypeMetaData: function (crmApi, relTypeIds) {
+              const ids = _.union(relTypeIds.benefits, relTypeIds.contacts, relTypeIds.highlighted);
+
+              return crmApi('RelationshipType', 'get', {
+                id: {IN: ids}
+              }).then(function (result) {
+                return result.values;
+              });
             }
           }
 

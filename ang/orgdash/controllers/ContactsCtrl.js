@@ -1,12 +1,40 @@
 (function(angular, $, _) {
 
   angular.module('orgdash')
-    .controller('ContactsCtrl', function($scope, RelatedContactService, highlightedRelTypes, profileId) {
+    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, profileId) {
       $scope.contactEditorIsOpen = false;
-      $scope.highlightedRelTypes = highlightedRelTypes;
       $scope.profileId = profileId;
       $scope.relatedContacts = RelatedContactService.get();
+      $scope.relTypeIds = relTypeIds;
       $scope.selectedContact;
+
+      /**
+       * Private helper function to determine whether organization contacts
+       * are on the A or the B side of a given relationship type.
+       *
+       * @param {string} id
+       *   Relationship type ID.
+       * @return {mixed}
+       *   - 'a' or 'b' if organizations are on a single side.
+       *   - undefined if no organizations in the relationship type.
+       *   - boolean false if organizations are on both sides.
+       */
+      function getRelTypeOrgSide(id) {
+        const type = relTypeMetaData[id];
+
+        let aOrB;
+        if (type.contact_type_a === 'Organization'
+          && type.contact_type_b === 'Organization')
+        {
+          aOrB = false;
+        } else if (type.contact_type_a === 'Organization') {
+          aOrB = 'a';
+        } else if (type.contact_type_b === 'Organization') {
+          aOrB = 'b';
+        }
+
+        return aOrB;
+      }
 
       /**
        * Creates a new RelatedContact and selects it for editing.
@@ -39,17 +67,54 @@
       };
 
       /**
+       * Public function for providing labels for relationship type IDs that
+       * takes into account which side of the relationship the organization is
+       * on.
+       *
+       * @param {string} id
+       *   Relationship type ID.
+       * @return {string}
+       *   Human-readable label.
+       */
+      $scope.getRelTypeLabel = function (id) {
+        // default to b, as organizations appear only on the B side of CiviCRM
+        // core relationship types
+        const orgSide = getRelTypeOrgSide(id) || 'b';
+        const otherContactSide = (orgSide === 'a' ? 'b' : 'a');
+        return relTypeMetaData[id][`label_${otherContactSide}_${orgSide}`];
+      };
+
+      /**
        * Callback for crmProfileForm directive.
        *
-       * After the contact is saved to the server, updates the local cache.
+       * After the contact is saved to the server, sends updated relationship
+       * information to the server and updates the local cache.
        *
        * @see the scope variable callbackPostSave for directive crmProfileForm
        * in module crmFieldMetadata.
        */
       $scope.handlePostSave = function (params, result) {
         const contactId = result.id.toString();
+
+        // update the name in the aggregate list
         $scope.selectedContact.sortName = result.values[contactId].sort_name;
 
+        // save relationship data which crmProfileForm doesn't know about
+        const relationshipApiParams = _.map($scope.selectedContact.relationships, function (rel) {
+          if (rel.id) {
+            return ['Relationship', 'create', rel];
+          } else {
+            rel.contact_id_a = ''; // TODO
+            rel.contact_id_b = ''; // TODO
+            return ['Relationship', 'create', rel];
+          }
+        });
+
+        // this somewhat unusual signature is documented here:
+        // https://docs.civicrm.org/dev/en/latest/api/interfaces/#crmapi3
+        crmApi(relationshipApiParams);
+
+        // update the local cache with a newly added contact
         if (!_.find($scope.relatedContacts, {contactId: contactId})) {
           $scope.selectedContact.contactId = contactId;
           $scope.selectedContact.profileData = params;

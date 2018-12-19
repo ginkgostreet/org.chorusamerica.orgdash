@@ -8,8 +8,8 @@
       <th ng-hide="contactEditorIsOpen">{{ts('Account email address')}}</th>
       <th
         ng-hide="contactEditorIsOpen"
-        ng-repeat="(id, relType) in highlightedRelTypes">
-        {{relType.description}}
+        ng-repeat="id in relTypeIds.highlighted">
+        {{getRelTypeLabel(id)}}
       </th>
     </tr>
   </thead>
@@ -25,7 +25,7 @@
       <td ng-hide="contactEditorIsOpen">{{relatedContact.accountEmail}}</td>
       <td
         ng-hide="contactEditorIsOpen"
-        ng-repeat="(id, relType) in highlightedRelTypes">
+        ng-repeat="id in relTypeIds.highlighted">
         {{relatedContact.getRelationshipOfType(id) && 'Yes' || 'No'}}
       </td>
     </tr>
