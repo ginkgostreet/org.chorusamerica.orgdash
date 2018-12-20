@@ -4,7 +4,6 @@ use CRM_Orgdash_ExtensionUtil as E;
 class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
 
   public function run() {
-    CRM_Utils_System::setTitle(E::ts('Organization Dashboard'));
     $this->exposeConfigurations();
 
     // See https://docs.civicrm.org/dev/en/latest/framework/angular/loader/#other-base-pages.

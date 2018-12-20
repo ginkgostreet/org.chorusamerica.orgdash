@@ -17,6 +17,27 @@
           resolve: {
             orgId: function ($stateParams) {
               return $stateParams.id;
+            },
+            orgContact: function (crmApi, orgId) {
+              const resultHandler = function (result) {
+                return result;
+              };
+
+              return crmApi('Contact', 'getsingle', {
+                id: orgId,
+                contact_type: 'Organization'
+              })
+                // The same handler is used for successes and failures so that
+                // the state's onEnter callback (which has appropriate context
+                // to change states) can redirect to an error page if necessary.
+                // Otherwise, the rejected promise would result in a Transition
+                // Rejection and confusing UX.
+                .then(resultHandler, resultHandler);
+            }
+          },
+          onEnter: function ($state, orgContact) {
+            if (orgContact.is_error === 1) {
+              return $state.target('org-contact-error');
             }
           }
         })
@@ -63,7 +84,10 @@
               });
             }
           }
+        })
 
+        .state('org-contact-error', {
+          templateUrl: '~/orgdash/partials/OrgContactError.html'
         });
     })
 
