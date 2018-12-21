@@ -17,9 +17,13 @@ return array(
 
     // Metadata for the UI
     'description' => E::ts('Specifies the profile to use for editing a single contact associated with the organization.'),
-    'entity_reference_options' => ['entity' => 'ufgroup'],
+    'entity_reference_options' => ['entity' => 'UFGroup'],
     'html_type' => 'entity_reference',
-    'settings_pages' => ['orgdash'],
-    'title' => E::ts('Single Contact Profile (Organization Dashboard)'),
+    'settings_pages' => [
+      'orgdash' => [
+        'weight' => 10,
+      ],
+    ],
+    'title' => E::ts('Single Contact Profile'),
   ),
 );

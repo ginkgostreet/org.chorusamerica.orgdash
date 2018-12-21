@@ -1,9 +1,9 @@
 (function(angular, $, _) {
 
   angular.module('orgdash')
-    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, profileId, orgId) {
+    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, settings, orgId) {
       $scope.contactEditorIsOpen = false;
-      $scope.profileId = profileId;
+      $scope.profileId = settings.orgdash_single_contact_profile;
       $scope.relatedContacts = RelatedContactService.get();
       $scope.relTypeIds = relTypeIds;
       $scope.selectedContact;

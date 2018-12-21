@@ -10,23 +10,26 @@ $setting = 'orgdash_benefits_relationship_types';
 
 return array(
   $setting => array(
-    'default' => [],
+    'default' => '',
     'is_contact' => FALSE,
     'is_domain' => TRUE,
     'name' => $setting,
-    // Stored as a serialized string rather than an array of IDs per
-    // https://docs.civicrm.org/dev/en/latest/framework/setting/#supported-properties
-    'serialize' => CRM_Core_DAO::SERIALIZE_JSON,
+    // Stored as a string rather than an array of IDs because the entityRef
+    // widget returns comma-separated values.
     'type' => 'String',
 
     // Metadata for the UI
     'description' => E::ts("Specifies the relationship types to use when building an organization's list of bestowable benefits."),
     'entity_reference_options' => [
-      'entity' => 'relationshiptype',
+      'entity' => 'RelationshipType',
       'multiple' => TRUE,
     ],
     'html_type' => 'entity_reference',
-    'settings_pages' => ['orgdash'],
-    'title' => E::ts('Relationship Types for Benefits (Organization Dashboard)'),
+    'settings_pages' => [
+      'orgdash' => [
+        'weight' => 20,
+      ],
+    ],
+    'title' => E::ts('Relationship Types for Benefits'),
   ),
 );

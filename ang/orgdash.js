@@ -33,6 +33,18 @@
                 // Otherwise, the rejected promise would result in a Transition
                 // Rejection and confusing UX.
                 .then(resultHandler, resultHandler);
+            },
+            settings: function () {
+              const settings = CRM.vars.orgdash;
+
+              // The entityRef widget on the settings form saves multiple selections
+              // as comma-separated strings (rather than as arrays). The transformation
+              // to the more useful array format is centralized here.
+              settings.orgdash_benefits_relationship_types = settings.orgdash_benefits_relationship_types.split(',');
+              settings.orgdash_contacts_relationship_types = settings.orgdash_contacts_relationship_types.split(',');
+              settings.orgdash_highlighted_relationship_types = settings.orgdash_highlighted_relationship_types.split(',');
+
+              return settings;
             }
           },
           onEnter: function ($state, orgContact) {
@@ -55,23 +67,20 @@
           templateUrl: '~/orgdash/partials/Contacts.html',
           controller: 'ContactsCtrl',
           resolve: {
-            profileId: function () {
-              return CRM.vars.orgdash.orgdash_single_contact_profile;
-            },
-            relatedContacts: function(RelatedContactService, orgId, profileId, relTypeIds) {
+            relatedContacts: function(RelatedContactService, orgId, settings, relTypeIds) {
               const relTypes = _.union(relTypeIds.benefits, relTypeIds.contacts, relTypeIds.highlighted);
 
               return RelatedContactService.fetch(
                 orgId,
                 relTypes,
-                profileId
+                settings.orgdash_single_contact_profile
               );
             },
-            relTypeIds: function () {
+            relTypeIds: function (settings) {
               return {
-                benefits: CRM.vars.orgdash.orgdash_benefits_relationship_types,
-                contacts: CRM.vars.orgdash.orgdash_contacts_relationship_types,
-                highlighted: CRM.vars.orgdash.orgdash_highlighted_relationship_types
+                benefits: settings.orgdash_benefits_relationship_types,
+                contacts: settings.orgdash_contacts_relationship_types,
+                highlighted: settings.orgdash_highlighted_relationship_types
               };
             },
             relTypeMetaData: function (crmApi, relTypeIds) {

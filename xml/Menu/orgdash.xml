@@ -5,4 +5,10 @@
     <page_callback>CRM_Orgdash_Page_Angular</page_callback>
     <access_arguments>access AJAX API</access_arguments>
   </item>
+  <item>
+    <path>civicrm/admin/extensions/orgdash</path>
+    <page_callback>CRM_Admin_Form_Generic</page_callback>
+    <title>Organization Dashboard Extension Settings</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>

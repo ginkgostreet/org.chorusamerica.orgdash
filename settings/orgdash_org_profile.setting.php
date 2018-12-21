@@ -16,11 +16,14 @@ return array(
     'is_contact' => FALSE,
 
     // Metadata for the UI
-    'settings_pages' => ['orgdash'],
-    'title' => E::ts('Organization Profile (Organization Dashboard)'),
     'description' => E::ts('Specifies the profile to use for editing organization contact information.'),
-    'html_type' => 'select',
-    'quick_form_type' => 'EntityRef',
-    'entity_reference_options' => ['entity' => 'ufgroup'],
+    'entity_reference_options' => ['entity' => 'UFGroup'],
+    'html_type' => 'entity_reference',
+    'settings_pages' => [
+      'orgdash' => [
+        'weight' => 5,
+      ],
+    ],
+    'title' => E::ts('Organization Profile'),
   ),
 );
