@@ -119,6 +119,7 @@
 
             rel[`contact_id_${orgSide}`] = orgId;
             rel[`contact_id_${otherContactSide}`] = contactId;
+            rel[`is_permission_${orgSide}_${otherContactSide}`] = 1;
             return ['Relationship', 'create', rel];
           }
         });
