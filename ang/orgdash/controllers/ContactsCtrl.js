@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   angular.module('orgdash')
-    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, profileId) {
+    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, profileId, orgId) {
       $scope.contactEditorIsOpen = false;
       $scope.profileId = profileId;
       $scope.relatedContacts = RelatedContactService.get();
@@ -34,6 +34,18 @@
         }
 
         return aOrB;
+      }
+
+      /**
+       * Private helper function to determine whether organization contacts
+       * are on the A or the B side of a given relationship type. For types with
+       * a less-than-certain answer, defaults to b, as organizations appear only
+       * on the B side of CiviCRM core relationship types.
+       *
+       * @see getRelTypeOrgSide().
+       */
+      function getRelTypeOrgSideSafe(id) {
+        return getRelTypeOrgSide(id) || 'b';
       }
 
       /**
@@ -77,9 +89,7 @@
        *   Human-readable label.
        */
       $scope.getRelTypeLabel = function (id) {
-        // default to b, as organizations appear only on the B side of CiviCRM
-        // core relationship types
-        const orgSide = getRelTypeOrgSide(id) || 'b';
+        const orgSide = getRelTypeOrgSideSafe(id);
         const otherContactSide = (orgSide === 'a' ? 'b' : 'a');
         return relTypeMetaData[id][`label_${otherContactSide}_${orgSide}`];
       };
@@ -104,8 +114,11 @@
           if (rel.id) {
             return ['Relationship', 'create', rel];
           } else {
-            rel.contact_id_a = ''; // TODO
-            rel.contact_id_b = ''; // TODO
+            const orgSide = getRelTypeOrgSideSafe(rel.relationship_type_id);
+            const otherContactSide = (orgSide === 'a' ? 'b' : 'a');
+
+            rel[`contact_id_${orgSide}`] = orgId;
+            rel[`contact_id_${otherContactSide}`] = contactId;
             return ['Relationship', 'create', rel];
           }
         });
@@ -118,7 +131,6 @@
         if (!_.find($scope.relatedContacts, {contactId: contactId})) {
           $scope.selectedContact.contactId = contactId;
           $scope.selectedContact.profileData = params;
-          $scope.selectedContact.relationships = {}; // TODO
 
           $scope.relatedContacts.push($scope.selectedContact);
         }
