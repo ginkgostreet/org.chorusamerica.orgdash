@@ -12,6 +12,7 @@ return array(
     'crmFieldMetadata',
     'crmUi',
     'crmUtil',
+    'ngAnimate',
     'ngMaterial',
     'ui.router',
   ),
@@ -21,7 +22,7 @@ return array(
     2 => 'ang/orgdash/*/*.js',
   ),
   'css' => array (
-    0 => 'ang/orgdash.css',
+    'ang/orgdash/css/transition-animations.css',
   ),
   'partials' => array (
     0 => 'ang/orgdash',
