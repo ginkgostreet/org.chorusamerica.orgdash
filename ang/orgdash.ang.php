@@ -12,6 +12,7 @@ return array(
     'crmFieldMetadata',
     'crmUi',
     'crmUtil',
+    'ngMaterial',
     'ui.router',
   ),
   'js' => array (

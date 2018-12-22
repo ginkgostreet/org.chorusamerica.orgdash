@@ -1,0 +1,20 @@
+<div class="orgdash-relationship"
+     crm-ui-id-scope
+     ng-form="{{name}}"
+     ng-repeat="relationship in model | filter: inAllowedTypes">
+
+  <div crm-ui-field="{title: relationship.label}">
+    <md-switch ng-model="relationship.is_active"
+               aria-label="{{ts('Active?')}}"
+               ng-true-value="'1'"
+               ng-false-value="'0'">
+      <span class="orgdash-relationship-status">
+        {{relationship.is_active === '1' && ts('Active') || ts('Inactive')}}
+      </span>
+    </md-switch>
+  </div>
+</div>
+<div class="orgdash-relationship-add-another crm-section">
+  <input crm-entityref="entityRef" ng-model="newRelationshipType" />
+  <button ng-click="add()">{{ts('Add')}}</button>
+</div>

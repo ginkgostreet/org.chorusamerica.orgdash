@@ -70,6 +70,7 @@
         this.relationships.push({
           id: data.id,
           is_active: data.is_active,
+          label: data.label,
           relationship_type_id: data.relationship_type_id
         });
       }
@@ -104,6 +105,9 @@
           'api.Profile.get': {
             contact_id: `$value.contact_id_${otherContactIsAorB}`,
             profile_id: profileId
+          },
+          'api.RelationshipType.getvalue': {
+            return: `label_${otherContactIsAorB}_${orgIsAorB}`
           },
           'api.UFMatch.getvalue': {
             contact_id: `$value.contact_id_${otherContactIsAorB}`,
@@ -191,6 +195,7 @@
               relatedContact.registerRelationship({
                 id: data.id,
                 is_active: data.is_active,
+                label: data['api.RelationshipType.getvalue'],
                 relationship_type_id: data.relationship_type_id
               });
 
