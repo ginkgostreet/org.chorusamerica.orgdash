@@ -1,0 +1,14 @@
+/* Styles specific to the dash.contacts state. */
+
+#orgdash-contact-screen {
+  overflow: hidden;
+  position: relative;
+  transition-property: height;
+  transition-duration: 0.5s;
+}
+
+#orgdash-contact-detail {
+  overflow-y: hidden;
+  max-width: unset;
+  width: 75%;
+}

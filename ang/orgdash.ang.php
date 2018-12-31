@@ -22,7 +22,7 @@ return array(
     2 => 'ang/orgdash/*/*.js',
   ),
   'css' => array (
-    'ang/orgdash/css/transition-animations.css',
+    'ang/orgdash/css/*.css',
   ),
   'partials' => array (
     0 => 'ang/orgdash',

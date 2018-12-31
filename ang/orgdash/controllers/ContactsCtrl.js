@@ -1,12 +1,35 @@
 (function(angular, $, _) {
 
   angular.module('orgdash')
-    .controller('ContactsCtrl', function($scope, crmApi, RelatedContactService, relTypeIds, relTypeMetaData, settings, orgId) {
-      $scope.contactEditorIsOpen = false;
+    .controller('ContactsCtrl', function($scope, crmApi, $mdSidenav, RelatedContactService, relTypeIds, relTypeMetaData, settings, orgId) {
       $scope.profileId = settings.orgdash_single_contact_profile;
       $scope.relatedContacts = RelatedContactService.get();
       $scope.relTypeIds = relTypeIds;
       $scope.selectedContact;
+
+      // On controller init, get the contact editor sidenav instance when it is
+      // ready (asynchronously) and set a close handler.
+      $mdSidenav('contact-detail', true).then(function (instance) {
+        instance.onClose(function () {
+          const closingFlag = 'orgdash-contact-screen-closing';
+          const listHeight = $('#orgdash-contact-list').height();
+          $('#orgdash-contact-screen')
+            .addClass(closingFlag)
+            .height(listHeight)
+            // Unselecting the contact immediately on close of the contact
+            // editor results in choppy transition animations; it is preferable
+            // to update the model after associated UI have been hidden.
+            .on('transitionend', function (e) {
+              const el = $(e.target);
+              // This event fires on both open and close; act only on close.
+              if (el.hasClass(closingFlag)) {
+                $scope.$apply(unselectContact);
+
+                el.removeClass(closingFlag);
+              }
+            });
+        });
+      });
 
       /**
        * Private helper function to determine whether organization contacts
@@ -34,6 +57,10 @@
         }
 
         return aOrB;
+      }
+
+      function unselectContact() {
+        delete $scope.selectedContact;
       }
 
       /**
@@ -135,6 +162,10 @@
 
           $scope.relatedContacts.push($scope.selectedContact);
         }
+
+        // Getting the sidenav synchronously since its existence can be inferred
+        // by the fact the user is interacting with the page.
+        $mdSidenav('contact-detail').close();
       };
 
       /**
@@ -193,7 +224,20 @@
        */
       $scope.selectContact = function (contact) {
         $scope.selectedContact = contact;
-        $scope.contactEditorIsOpen = true;
+
+        // Getting the sidenav synchronously since its existence can be inferred
+        // by the fact the user is interacting with the page.
+        $mdSidenav('contact-detail').open().then(function () {
+          const h = document.getElementById('orgdash-contact-detail').scrollHeight;
+
+          const container = $('#orgdash-contact-screen');
+          // This silly hack is to enable transition animations, as both states
+          // (start and end) must have explicit, non-automatic heights.
+          container.height(container.height());
+
+          const padding = 10;
+          container.height(h + padding);
+        });
       };
 
     });

@@ -1,47 +1,51 @@
 <div crm-ui-debug="relatedContacts" class="ng-isolate-scope"></div>
 <div crm-ui-debug="selectedContact" class="ng-isolate-scope"></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>{{ts('Name')}}</th>
-      <th ng-hide="contactEditorIsOpen">{{ts('Account email address')}}</th>
-      <th
-        ng-hide="contactEditorIsOpen"
-        ng-repeat="id in relTypeIds.highlighted">
-        {{getRelTypeLabel(id)}}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr
-      ng-class="{
-        'crm-row-selected': isSelected(relatedContact),
-        disabled: !hasActiveRelationship(relatedContact)
-      }"
-      ng-click="selectContact(relatedContact)"
-      ng-repeat="(contactId, relatedContact) in relatedContacts | orderBy: '':false:orderContacts">
-      <td>{{relatedContact.sortName}}</td>
-      <td ng-hide="contactEditorIsOpen">{{relatedContact.accountEmail}}</td>
-      <td
-        ng-hide="contactEditorIsOpen"
-        ng-repeat="id in relTypeIds.highlighted">
-        {{relatedContact.getRelationshipOfType(id) && 'Yes' || 'No'}}
-      </td>
-    </tr>
-  </tbody>
-</table>
-<button
-  ng-click="addContact()"
-  ng-disabled="selectedContact && !selectedContact.contactId">
-  Add
-</button>
+<div id="orgdash-contact-screen">
+  <div id="orgdash-contact-list">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ts('Name')}}</th>
+          <th>{{ts('Account email address')}}</th>
+          <th ng-repeat="id in relTypeIds.highlighted">
+            {{getRelTypeLabel(id)}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          ng-class="{
+            'crm-row-selected': isSelected(relatedContact),
+            disabled: !hasActiveRelationship(relatedContact)
+          }"
+          ng-click="selectContact(relatedContact)"
+          ng-repeat="(contactId, relatedContact) in relatedContacts | orderBy: '':false:orderContacts">
+          <td>{{relatedContact.sortName}}</td>
+          <td>{{relatedContact.accountEmail}}</td>
+          <td ng-repeat="id in relTypeIds.highlighted">
+            {{relatedContact.getRelationshipOfType(id) && 'Yes' || 'No'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button
+      ng-click="addContact()"
+      ng-disabled="selectedContact && !selectedContact.contactId">
+      Add
+    </button>
+  </div>
 
-<crm-profile-form
-  ng-if="selectedContact"
-  check-contact-cache="getCachedContact(profileId, selectedContact.contactId)"
-  contact-id="selectedContact.contactId"
-  name="contactDetails"
-  post-save="handlePostSave(params, result)"
-  profile-id="profileId">
-</crm-profile-form>
+  <md-sidenav
+    class="md-sidenav-right md-whiteframe-12dp"
+    id="orgdash-contact-detail"
+    md-component-id="contact-detail">
+    <crm-profile-form
+      check-contact-cache="getCachedContact(profileId, selectedContact.contactId)"
+      contact-id="selectedContact.contactId"
+      name="contactDetails"
+      post-save="handlePostSave(params, result)"
+      profile-id="profileId">
+    </crm-profile-form>
+  </md-sidenav>
+</div>
