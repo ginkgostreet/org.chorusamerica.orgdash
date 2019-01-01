@@ -7,29 +7,7 @@
       $scope.relTypeIds = relTypeIds;
       $scope.selectedContact;
 
-      // On controller init, get the contact editor sidenav instance when it is
-      // ready (asynchronously) and set a close handler.
-      $mdSidenav('contact-detail', true).then(function (instance) {
-        instance.onClose(function () {
-          const closingFlag = 'orgdash-contact-screen-closing';
-          const listHeight = $('#orgdash-contact-list').height();
-          $('#orgdash-contact-screen')
-            .addClass(closingFlag)
-            .height(listHeight)
-            // Unselecting the contact immediately on close of the contact
-            // editor results in choppy transition animations; it is preferable
-            // to update the model after associated UI have been hidden.
-            .on('transitionend', function (e) {
-              const el = $(e.target);
-              // This event fires on both open and close; act only on close.
-              if (el.hasClass(closingFlag)) {
-                $scope.$apply(unselectContact);
-
-                el.removeClass(closingFlag);
-              }
-            });
-        });
-      });
+      init();
 
       /**
        * Private helper function to determine whether organization contacts
@@ -59,10 +37,6 @@
         return aOrB;
       }
 
-      function unselectContact() {
-        delete $scope.selectedContact;
-      }
-
       /**
        * Private helper function to determine whether organization contacts
        * are on the A or the B side of a given relationship type. For types with
@@ -73,6 +47,64 @@
        */
       function getRelTypeOrgSideSafe(id) {
         return getRelTypeOrgSide(id) || 'b';
+      }
+
+      /**
+       * Setup to run on initialization of the controller.
+       */
+      function init() {
+        // Get the contact editor sidenav instance when it is ready
+        // (asynchronously) and set a close handler.
+        $mdSidenav('contact-detail', true).then(function (instance) {
+          instance.onClose(function () {
+            const closingFlag = 'orgdash-contact-screen-closing';
+            const listHeight = $('#orgdash-contact-list').height();
+            $('#orgdash-contact-screen')
+              .addClass(closingFlag)
+              .height(listHeight)
+              // Unselecting the contact immediately on close of the contact
+              // editor results in choppy transition animations; it is preferable
+              // to update the model after associated UI have been hidden.
+              .on('transitionend', function (e) {
+                const el = $(e.target);
+                // This event fires on both open and close; act only on close.
+                if (el.hasClass(closingFlag)) {
+                  $scope.$apply(unselectContact);
+                  el.removeClass(closingFlag);
+                }
+              });
+          });
+        });
+
+        // Can't bind directly to the "add another" buttons as they haven't been
+        // rendered on controller init.
+        $('body').on('click', '.orgdash-relationship-add-another', function () {
+          $('#orgdash-contact-screen').one('transitionend', function () {
+            syncEditorAndParentHeights();
+          });
+        });
+      }
+
+      /**
+       * Private helper function to keep the heights of the contact editor and
+       * its parent in sync, since the parent is relatively positioned and the
+       * child is absolutely positioned. Prevents internal scrolling in the
+       * contact editor.
+       */
+      function syncEditorAndParentHeights() {
+        const h = document.getElementById('orgdash-contact-detail').scrollHeight;
+
+        const container = $('#orgdash-contact-screen');
+        // This silly hack enables transition animations, as both states
+        // (start and end) must have explicit, non-automatic heights.
+        container.height(container.height());
+
+        const padding = 10;
+        container.height(h + padding);
+      }
+
+      function unselectContact() {
+        delete $scope.selectedContact;
       }
 
       /**
@@ -228,15 +260,7 @@
         // Getting the sidenav synchronously since its existence can be inferred
         // by the fact the user is interacting with the page.
         $mdSidenav('contact-detail').open().then(function () {
-          const h = document.getElementById('orgdash-contact-detail').scrollHeight;
-
-          const container = $('#orgdash-contact-screen');
-          // This silly hack is to enable transition animations, as both states
-          // (start and end) must have explicit, non-automatic heights.
-          container.height(container.height());
-
-          const padding = 10;
-          container.height(h + padding);
+          syncEditorAndParentHeights();
         });
       };
 

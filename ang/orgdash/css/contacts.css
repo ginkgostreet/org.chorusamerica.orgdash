@@ -15,7 +15,7 @@
 
 #orgdash-contact-detail div[crm-render-field],
 #orgdash-contact-detail .orgdash-relationship,
-#orgdash-contact-detail .orgdash-relationship-add-another {
+#orgdash-contact-detail .orgdash-relationship-add-another-wrapper {
   margin-left: 10px;
   margin-right: 10px;
 }
