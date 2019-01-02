@@ -75,6 +75,14 @@
          */
         scope.newRelationshipType;
 
+        // Not sure why we have to do our own "required" validation. We are
+        // supposed to get that for free since our directive requires ngModel.
+        if (attrs.required) {
+          ngModelCtrl.$validators.required = function (modelValue) {
+            return Array.isArray(modelValue) && modelValue.length > 0;
+          };
+        }
+
         /**
          * Adds the user-entered data to the model, or sets an error message.
          */
