@@ -8,7 +8,7 @@
  * <relationships
  *   add-another-text="Add a benefit"
  *   allowed-types="whitelistedRelTypes"
- *   model="selectedContact.relationships"
+ *   ng-model="selectedContact.relationships"
  *   name='myRelationships'>
  * </relationships>
  *
@@ -17,6 +17,7 @@
 (function(angular, $, _) {
   angular.module('orgdash').directive('relationships', function() {
     return {
+      require: 'ngModel',
       restrict: 'E',
       templateUrl: '~/orgdash/directives/relationships.html',
       scope: {
@@ -36,48 +37,12 @@
         allowedTypes: '=',
 
         /**
-         * TODO: We should probably be using ngModel...
-         */
-        model: '=',
-
-        /**
          * A name for the ngForm.
          */
         name: '@'
       },
-      controller: ['$rootScope', '$element', '$scope', function($rootScope, $element, $scope) {
-        // Make sure IDs are represented as strings. This helps comparisons
-        // elsewhere, as the CiviCRM API returns IDs as strings.
-        $scope.allowedTypes = $scope.allowedTypes.map(val => val.toString());
-
-        /**
-         * User-selected relationship type to add.
-         */
-        $scope.newRelationshipType;
-
-        $scope.ts = $rootScope.ts;
-
-        /**
-         * Adds the user-entered data to the model, or (TODO) displays an error
-         * message.
-         */
-        $scope.add = function () {
-          if (angular.isUndefined($scope.newRelationshipType) || $scope.newRelationshipType === '') {
-            console.log('TODO: Display user feedback that a selection must be made');
-            return;
-          }
-
-          if (_.find($scope.model, {relationship_type_id: $scope.newRelationshipType})) {
-            console.log('TODO: Display user feedback that two relationships of the same type is not valid');
-            return;
-          }
-
-          $scope.model.push({
-            is_active: '1',
-            label: $element.find('.select2-chosen').text(),
-            relationship_type_id: $scope.newRelationshipType
-          });
-        }
+      controller: ['$scope', function($scope) {
+        $scope.ts = $scope.$root.ts;
 
         /**
          * Specification for the "add another" relationship widget.
@@ -95,6 +60,44 @@
           }
         };
 
+      }],
+      link: function(scope, element, attrs, ngModelCtrl) {
+        // Not really The Angular Way™, but used for DIY validation -- for
+        // providing user feedback *before* selections are added to the model.
+        scope.addAnotherError;
+
+        // Make sure IDs are represented as strings. This helps comparisons
+        // elsewhere, as the CiviCRM API returns IDs as strings.
+        scope.allowedTypes = scope.allowedTypes.map(val => val.toString());
+
+        /**
+         * User-selected relationship type to add.
+         */
+        scope.newRelationshipType;
+
+        /**
+         * Adds the user-entered data to the model, or sets an error message.
+         */
+        scope.add = function () {
+          if (angular.isUndefined(scope.newRelationshipType) || scope.newRelationshipType === '') {
+            scope.addAnotherError = scope.ts('Please select a relationship type.');
+            return;
+          }
+
+          if (_.find(ngModelCtrl.$modelValue, {relationship_type_id: scope.newRelationshipType})) {
+            scope.addAnotherError = scope.ts('A relationship with the selected type already exists between these two contacts.');
+            return;
+          }
+
+          scope.model.push({
+            is_active: '1',
+            label: element.find('.select2-chosen').text(),
+            relationship_type_id: scope.newRelationshipType
+          });
+
+          ngModelCtrl.$validate();
+        }
+
         /**
          * Tests whether a relationship is whitelisted for use in this display.
          *
@@ -103,14 +106,18 @@
          * @param {object} relationship
          * @returns {boolean}
          */
-        $scope.inAllowedTypes = function (relationship) {
+        scope.inAllowedTypes = function (relationship) {
           return (
             relationship.relationship_type_id
-            && $scope.allowedTypes.indexOf(relationship.relationship_type_id) !== -1
+            && scope.allowedTypes.indexOf(relationship.relationship_type_id) !== -1
           );
         };
 
-      }]
+        ngModelCtrl.$render = function () {
+          scope.model = ngModelCtrl.$viewValue;
+        };
+
+      }
     };
   });
 })(angular, CRM.$, CRM._);

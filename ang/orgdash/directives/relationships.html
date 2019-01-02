@@ -1,20 +1,26 @@
-<div class="orgdash-relationship"
-     crm-ui-id-scope
-     ng-form="{{name}}"
-     ng-repeat="relationship in model | filter: inAllowedTypes">
+<div class="orgdash-relationships"
+  crm-ui-id-scope
+  ng-form="{{name}}">
 
-  <div crm-ui-field="{title: relationship.label}">
-    <md-switch ng-model="relationship.is_active"
-               aria-label="{{ts('Active?')}}"
-               ng-true-value="'1'"
-               ng-false-value="'0'">
-      <span class="orgdash-relationship-status">
-        {{relationship.is_active === '1' && ts('Active') || ts('Inactive')}}
-      </span>
-    </md-switch>
+  <div
+    class="orgdash-relationship"
+    ng-repeat="relationship in model | filter: inAllowedTypes">
+
+    <div crm-ui-field="{title: relationship.label}">
+      <md-switch ng-model="relationship.is_active"
+        aria-label="{{ts('Active?')}}"
+        ng-true-value="'1'"
+        ng-false-value="'0'">
+
+        <span class="orgdash-relationship-status">
+          {{relationship.is_active === '1' && ts('Active') || ts('Inactive')}}
+        </span>
+      </md-switch>
+    </div>
   </div>
-</div>
-<div class="orgdash-relationship-add-another-wrapper crm-section">
-  <input crm-entityref="entityRef" ng-model="newRelationshipType" />
-  <button class="orgdash-relationship-add-another" ng-click="add()">{{ts('Add')}}</button>
+  <div class="orgdash-relationship-add-another-wrapper crm-section">
+    <p class="crm-error" ng-if="addAnotherError">{{addAnotherError}}</p>
+    <input crm-entityref="entityRef" ng-model="newRelationshipType" />
+    <button class="orgdash-relationship-add-another" ng-click="add()">{{ts('Add')}}</button>
+  </div>
 </div>
