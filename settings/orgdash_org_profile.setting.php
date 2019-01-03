@@ -6,7 +6,7 @@
  */
 use CRM_Orgdash_ExtensionUtil as E;
 
-$setting = 'orgdash_org_profile_id';
+$setting = 'orgdash_org_profile';
 
 return array(
   $setting => array(
