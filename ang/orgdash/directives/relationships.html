@@ -19,8 +19,8 @@
     </div>
   </div>
   <div class="orgdash-relationship-add-another-wrapper crm-section">
-    <p class="crm-error" ng-if="addAnotherError">{{addAnotherError}}</p>
     <input crm-entityref="entityRef" ng-model="newRelationshipType" />
     <button class="orgdash-relationship-add-another" type="button" ng-click="add()">{{ts('Add')}}</button>
   </div>
+  <p class="crm-error" ng-if="addAnotherError">{{addAnotherError}}</p>
 </div>

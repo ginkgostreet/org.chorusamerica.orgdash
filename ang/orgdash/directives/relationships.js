@@ -87,6 +87,8 @@
          * Adds the user-entered data to the model, or sets an error message.
          */
         scope.add = function () {
+          scope.addAnotherError = undefined;
+
           if (angular.isUndefined(scope.newRelationshipType) || scope.newRelationshipType === '') {
             scope.addAnotherError = scope.ts('Please select a relationship type.');
             return;
