@@ -12,6 +12,8 @@ class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
     $loader->setPageName('civicrm/orgdash');
     $loader->load();
 
+    CRM_Core_Resources::singleton()->addScriptFile(E::LONG_NAME, 'js/angular-init-failed.js');
+
     parent::run();
   }
 
