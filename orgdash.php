@@ -149,3 +149,14 @@ function orgdash_civicrm_navigationMenu(&$menu) {
   ));
   _orgdash_civix_navigationMenu($menu);
 }
+
+/**
+ * Implements hook_civicrm_alterAPIPermissions().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterAPIPermissions/
+ */
+function orgdash_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  if (CRM_Orgdash_Permission::canSkipPermissionsCheck($entity, $action, $params)) {
+    $params['check_permissions'] = FALSE;
+  }
+}
