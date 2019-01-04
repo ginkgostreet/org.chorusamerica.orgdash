@@ -3,6 +3,8 @@ use CRM_Orgdash_ExtensionUtil as E;
 
 class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
 
+  use CRM_Orgdash_Setting_Trait;
+
   public function run() {
     $this->exposeConfigurations();
 
@@ -26,23 +28,7 @@ class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
    * where they are needed.
    */
   private function exposeConfigurations() {
-    // It seems inefficient to fetch *all* CiviCRM settings, but this is what
-    // Civi::settings()->get() does under the hood, so we might as well do it
-    // just once.
-
-    // Sigh, settings fetched through the Civi interface are not deserialized...
-    // $allSettings = Civi::settings()->all();
-
-    // ... so we use the API instead.
-    $allSettings = civicrm_api3('Setting', 'get', array(
-      'sequential' => 1,
-    ))['values'][0];
-
-    $extensionConfigs = array_filter($allSettings, function ($settingName) {
-      return (strpos($settingName, E::SHORT_NAME . '_') === 0);
-    }, ARRAY_FILTER_USE_KEY);
-
-    CRM_Core_Resources::singleton()->addVars(E::SHORT_NAME, $extensionConfigs);
+    CRM_Core_Resources::singleton()->addVars(E::SHORT_NAME, self::getExtensionSettings());
   }
 
 }

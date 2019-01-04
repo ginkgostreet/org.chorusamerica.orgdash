@@ -35,16 +35,7 @@
                 .then(resultHandler, resultHandler);
             },
             settings: function () {
-              const settings = CRM.vars.orgdash;
-
-              // The entityRef widget on the settings form saves multiple selections
-              // as comma-separated strings (rather than as arrays). The transformation
-              // to the more useful array format is centralized here.
-              settings.orgdash_benefits_relationship_types = settings.orgdash_benefits_relationship_types.split(',');
-              settings.orgdash_contacts_relationship_types = settings.orgdash_contacts_relationship_types.split(',');
-              settings.orgdash_highlighted_relationship_types = settings.orgdash_highlighted_relationship_types.split(',');
-
-              return settings;
+              return CRM.vars.orgdash;
             }
           },
           onEnter: function ($state, orgContact) {
