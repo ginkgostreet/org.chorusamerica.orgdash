@@ -46,6 +46,22 @@
       name="contactDetails"
       post-save="handlePostSave(params, result)"
       profile-id="profileId">
+
+      <h3>{{ts('Relationships')}}</h3>
+      <relationships
+        allowed-types="relTypeIds.contacts"
+        ng-model="selectedContact.relationships"
+        name='orgRelationships'
+        required>
+      </relationships>
+
+      <h3>{{ts('Benefits')}}</h3>
+      <relationships
+        add-another-text="{{ts('Add a benefit')}}"
+        allowed-types="relTypeIds.benefits"
+        ng-model="selectedContact.relationships"
+        name='benefitRelationships'>
+      </relationships>
     </crm-profile-form>
   </md-sidenav>
 </div>
