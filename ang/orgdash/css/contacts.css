@@ -18,3 +18,7 @@
   margin-left: 10px;
   margin-right: 10px;
 }
+
+#orgdash-contact-list tbody tr {
+  cursor: pointer;
+}
