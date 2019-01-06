@@ -32,6 +32,7 @@ class CRM_Orgdash_Permission implements CRM_Orgdash_Permission_Interface {
         $permissionType = CRM_Core_Permission::VIEW;
         break;
       case 'create':
+      case 'submit':
         $permissionType = CRM_Core_Permission::EDIT;
         break;
       default:
