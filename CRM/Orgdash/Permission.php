@@ -16,4 +16,29 @@ class CRM_Orgdash_Permission implements CRM_Orgdash_Permission_Interface {
     return FALSE;
   }
 
+  /**
+   * Helper function to translate API actions to permissions requirements.
+   *
+   * @param string $apiAction
+   *   'get', 'create', etc.
+   * @return mixed
+   *   CRM_Core_Permission::EDIT | CRM_Core_Permission::VIEW | NULL
+   */
+  public static function getPermissionType($apiAction) {
+    switch (strtolower($apiAction)) {
+      case 'get':
+      case 'getsingle':
+      case 'getvalue':
+        $permissionType = CRM_Core_Permission::VIEW;
+        break;
+      case 'create':
+        $permissionType = CRM_Core_Permission::EDIT;
+        break;
+      default:
+        $permissionType = NULL;
+    }
+
+    return $permissionType;
+  }
+
 }
