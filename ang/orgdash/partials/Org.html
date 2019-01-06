@@ -1,5 +1,12 @@
-<crm-profile-form
-  name="orgDetails"
-  profile-id="profileId"
-  contact-id="orgId">
-</crm-profile-form>
+<div crm-ui-debug="memberships" class="ng-isolate-scope"></div>
+<div ng-show="memberships" class="orgdash-org-memberships">
+  <ng-include src="'~/orgdash/partials/Membership.html'"></ng-include>
+</div>
+<div class="orgdash-org-details">
+  <h2>{{ts('Organization Details')}}</h2>
+  <crm-profile-form
+    name="orgDetails"
+    profile-id="profileId"
+    contact-id="orgId">
+  </crm-profile-form>
+</div>

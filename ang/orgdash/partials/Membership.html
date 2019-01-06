@@ -1,0 +1,22 @@
+<h2>{{ts('Memberships')}}</h2>
+<table class="row-highlight">
+  <thead>
+    <tr>
+      <th>{{ts('Type')}}</th>
+      <th>{{ts('Start')}}</th>
+      <th>{{ts('End')}}</th>
+      <th>{{ts('Status')}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      ng-class="{disabled: membership.is_current == '0'}"
+      ng-repeat="membership in memberships | orderBy: '-end_date'">
+
+      <td>{{membership.membership_name}}</td>
+      <td>{{formatDate(membership.start_date)}}</td>
+      <td>{{formatDate(membership.end_date)}}</td>
+      <td>{{membership.status_label}}</td>
+    </tr>
+  </tbody>
+</table>
