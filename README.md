@@ -1,44 +1,82 @@
-# org.chorusamerica.orgdash
+# Organization Dashboard
 
 ![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+Organization Dashboard (org.chorusamerica.orgdash) is an extension for
+[CiviCRM](https://civicrm.org) which provides an interface for appropriately
+permissioned users to administer the organizations to which they belong.
+The interface is intended to be a public-facing rather than a backend tool: the
+anticipated audience is the membership base of the CiviCRM installation owner.
+An organization administrator may update the organization's details as well as
+manage relationships and contact information for contacts related to her
+organization.
 
-The extension is licensed under [AGPL-3.0](LICENSE.txt).
+The extension strives to give site administrators maximal flexibility. A site
+admin may configure:
+* which relationship types to display in the dashboard
+* which relationship types to highlight in the contact list view
+* which relationship types to use when building an organization's list of
+  bestowable benefits
+* which profiles to use for editing the organization or associated contacts
+
+## Installation
+
+This extension has not yet been published for in-app installation. [General
+extension installation instructions](https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/#installing-a-new-extension)
+are available in the CiviCRM System Administrator Guide.
+
+This extension has JavaScript dependencies which are declared in `package.json`.
+To install them:
+
+```bash
+cd <extension-root>
+node install
+```
 
 ## Requirements
+* CiviCRM v5.10+
+* [Related Permissions Module (nz.co.fuzion.relatedpermissions)](https://github.com/eileenmcnaughton/nz.co.fuzion.relatedpermissions)
+  * Allows the permission flag on a contact's relationship to work as a true ACL.
+* [Civicrm FieldMetadata (org.civicrm.fieldmetadata)](https://github.com/ginkgostreet/org.civicrm.fieldmetadata) v1.1+
+  * Allows building AngularJS forms and widgets from field metadata.
 
-* PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
+### Notes on CiviCRM version dependency
+In v5.8, CiviCRM [introduced](https://github.com/civicrm/civicrm-core/commit/f167c7a9f5b5d146eca4cefd8aab89dc4f995a9a#diff-1a5e8b8c5ce730e1f211c070478823d7)
+a ["generic" settings form](https://docs.civicrm.org/dev/en/latest/framework/setting/#creating-a-new-setting-in-an-extension)
+which builds a user interface based off of [settings metadata](https://docs.civicrm.org/dev/en/latest/framework/setting/#supported-properties).
+Organization Dashboard's administrative interface is built on the "generic"
+settings form. Users running an earlier version of CiviCRM will either need to
+backport the "generic" form functionality (cursory review indicates this is not
+as straightforward adding the new `CRM_Admin_Form_Generic` class and porting
+updates to the `CRM_Admin_Form_SettingTrait` trait) or configure the extension
+outside the user interface (e.g., via the settings API or hardcoded values in
+`civicrm.settings.php`).
 
-## Installation (Web UI)
-
-This extension has not yet been published for installation via the web UI.
-
-## Installation (CLI, Zip)
-
-Sysadmins and developers may download the `.zip` file for this extension and
-install it with the command-line tool [cv](https://github.com/civicrm/cv).
-
-```bash
-cd <extension-dir>
-cv dl org.chorusamerica.orgdash@https://github.com/FIXME/org.chorusamerica.orgdash/archive/master.zip
-```
-
-## Installation (CLI, Git)
-
-Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) repo for this extension and
-install it with the command-line tool [cv](https://github.com/civicrm/cv).
-
-```bash
-git clone https://github.com/FIXME/org.chorusamerica.orgdash.git
-cv en orgdash
-```
+In v5.10, some problems with how CiviCRM handles case variability in API requests
+were [corrected](https://github.com/civicrm/civicrm-core/pull/13343). This bugfix
+is required to enable entityRef autocomplete widgets to be used with Profiles
+in the administrative interface. Organization Dashboard makes use of the same
+corrected logic in delegating API permissions overrides to entity-specific
+classes (see `CRM_Orgdash_Permission::canSkipPermissionsCheck()`).
 
 ## Usage
+* Configure the extension by navigating to _Administer > System Settings >
+  Organization Dashboard_.
+* View an organization's dashboard by navigating to CiviCRM path
+  _/civicrm/orgdash/#/<organization_contact_id>_. The "access AJAX API"
+  permission is required to view the page. Contacts lacking permission to edit
+  the organization (via ACL, permissioned relationship, global permissions like
+  "edit all contacts," etc.) will be denied access.
+* To add new contacts to the organization, the acting user should have the "add
+  contacts" permission.
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+## Technologies
+TODO
 
 ## Known Issues
+TODO
 
-(* FIXME *)
+
+## License
+
+[AGPL-3.0](https://github.com/ginkgostreet/org.chorusamerica.orgdash/blob/master/LICENSE.txt)

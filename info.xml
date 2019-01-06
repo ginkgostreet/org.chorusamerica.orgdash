@@ -9,14 +9,13 @@
     <email>webmaster@chorusamerica.org</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">http://FIXME</url>
-    <url desc="Documentation">http://FIXME</url>
-    <url desc="Support">http://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/ginkgostreet/org.chorusamerica.orgdash</url>
+    <url desc="Documentation">https://github.com/ginkgostreet/org.chorusamerica.orgdash#readme</url>
+    <url desc="Support">https://github.com/ginkgostreet/org.chorusamerica.orgdash/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2018-11-27</releaseDate>
-  <version>1.0</version>
-  <develStage>alpha</develStage>
+  <releaseDate>2019-01-06</releaseDate>
+  <version>0.1.0</version>
   <compatibility>
     <ver>5.10</ver>
   </compatibility>
@@ -24,7 +23,10 @@
     <ext>nz.co.fuzion.relatedpermissions</ext>
     <ext>org.civicrm.fieldmetadata</ext>
   </requires>
-  <comments>This is a new, undeveloped module</comments>
+  <comments>
+    Configuration at Administer > System Settings > Organization Dashboard.
+    Dashboard appears at CiviCRM path /civicrm/orgdash/#/[organization_contact_id].
+  </comments>
   <civix>
     <namespace>CRM/Orgdash</namespace>
   </civix>
