@@ -10,14 +10,11 @@ class CRM_Orgdash_Permission_UFMatch implements CRM_Orgdash_Permission_Interface
    * @inheritDoc
    */
   public static function canSkipPermissionsCheck($entity, $action, $params) {
-    $contactIds = (array) $params['contact_id'];
+    $contactId = $params['contact_id'];
     $permissionType = CRM_Orgdash_Permission::getPermissionType($action);
 
-    if (!empty($contactIds) && isset($permissionType)) {
-      // If the initial list of contact IDs is identical to the one that has
-      // been filtered based on permissions, ACLs, relationships, etc., then the
-      // permissions check can be skipped.
-      return ($contactIds == CRM_Contact_BAO_Contact_Permission::allowList($contactIds, $permissionType));
+    if (isset($contactId, $permissionType)) {
+      return CRM_Contact_BAO_Contact_Permission::allow($contactId, $permissionType);
     }
 
     return FALSE;

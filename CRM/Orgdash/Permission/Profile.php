@@ -10,14 +10,11 @@ class CRM_Orgdash_Permission_Profile implements CRM_Orgdash_Permission_Interface
   public static function canSkipPermissionsCheck($entity, $action, $params) {
     $profileAllowed = self::wasConfiguredProfileInRequest($params);
 
-    $contactIds = (array) CRM_Utils_Array::value('contact_id', $params);
+    $contactId = CRM_Utils_Array::value('contact_id', $params);
     $permissionType = CRM_Orgdash_Permission::getPermissionType($action);
     $contactAllowed = FALSE;
-    if (!empty($contactIds) && isset($permissionType)) {
-      // If the initial list of contact IDs is identical to the one that has
-      // been filtered based on permissions, ACLs, relationships, etc., then the
-      // permissions check can be skipped.
-      $contactAllowed = ($contactIds == CRM_Contact_BAO_Contact_Permission::allowList($contactIds, $permissionType));
+    if (isset($contactId, $permissionType)) {
+      $contactAllowed = CRM_Contact_BAO_Contact_Permission::allow($contactId, $permissionType);
     }
 
     return $profileAllowed && $contactAllowed;
