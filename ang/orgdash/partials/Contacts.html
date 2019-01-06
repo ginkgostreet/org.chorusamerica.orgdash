@@ -24,7 +24,7 @@
           <td>{{relatedContact.sortName}}</td>
           <td>{{relatedContact.accountEmail}}</td>
           <td ng-repeat="id in relTypeIds.highlighted">
-            {{relatedContact.getRelationshipOfType(id) && 'Yes' || 'No'}}
+            {{relatedContact.getRelationshipOfType(id).is_active === '1' && 'Yes' || 'No'}}
           </td>
         </tr>
       </tbody>
