@@ -16,6 +16,9 @@ class CRM_Orgdash_Permission_Profile implements CRM_Orgdash_Permission_Interface
     if (isset($contactId, $permissionType)) {
       $contactAllowed = CRM_Contact_BAO_Contact_Permission::allow($contactId, $permissionType);
     }
+    elseif (!isset($contactId) && strtolower($action) === 'submit') {
+      $contactAllowed = CRM_Core_Permission::check('add contacts');
+    }
 
     return $profileAllowed && $contactAllowed;
   }
