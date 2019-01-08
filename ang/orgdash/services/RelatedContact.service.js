@@ -125,6 +125,57 @@
       }
 
       /**
+       * Private method for finding organizations that a contact may administer.
+       *
+       * @param {number[]} relTypes
+       *   Only relationships of these types will be considered.
+       * @param {number} contactId
+       *   Contact for which admin-able orgs are sought. Defaults to acting user.
+       * @return {Promise.<object[]>}
+       *   Promise which resolves to an array of objects with contact_id and
+       *   display_name properties.
+       */
+      function findAdminableOrgs (relTypes, contactId) {
+        // Default to acting user
+        contactId = contactId || 'user_contact_id';
+        relTypes = (Array.isArray(relTypes) ? relTypes : [relTypes]);
+
+        const apiParams = [];
+        const relationshipSides = ['a', 'b'];
+        relationshipSides.forEach(contactRelSide => {
+          const orgContactSide = (contactRelSide === 'a' ? 'b' : 'a');
+          const relParams = {
+            is_active: 1,
+            relationship_type_id: {IN: relTypes},
+            options: {
+              limit: 0
+            },
+            sequential: 1,
+            'api.Contact.getsingle': {
+              contact_id: `$value.contact_id_${orgContactSide}`,
+              return: ['display_name', 'id']
+            }
+          };
+          relParams[`contact_id_${contactRelSide}`] = contactId;
+          relParams[`is_permission_${contactRelSide}_${contactRelSide}`] = 1;
+
+          apiParams.push(['Relationship', 'get', relParams]);
+        });
+
+        // this somewhat unusual API signature is documented here:
+        // https://docs.civicrm.org/dev/en/latest/api/interfaces/#crmapi3
+        return crmApi(apiParams).then(results => {
+          const organizations = [];
+          const relationshipCollections = results.filter(result => result.count !== 0);
+          relationshipCollections.forEach(collection => {
+            Array.prototype.push.apply(organizations, collection.values.map(rel => rel['api.Contact.getsingle']));
+          });
+          const dedupedOrgs = _.uniq(organizations, org => org.contact_id);
+          return _.sortBy(dedupedOrgs, org => org.display_name);
+        });
+      }
+
+      /**
        * The service itself.
        */
       return {
@@ -202,6 +253,19 @@
             });
           });
         },
+
+        /**
+         * Public method for finding organizations that a contact may administer.
+         *
+         * @param {number[]} relTypes
+         *   Only relationships of these types will be considered.
+         * @param {number} contactId
+         *   Contact for which admin-able orgs are sought. Defaults to acting user.
+         * @return {Promise.<object[]>}
+         *   Promise which resolves to an array of objects with contact_id and
+         *   display_name properties.
+         */
+        findAdminableOrgs: findAdminableOrgs,
 
         /**
          * Public method for getting contacts from local cache.

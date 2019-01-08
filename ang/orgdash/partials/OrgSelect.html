@@ -1,0 +1,12 @@
+<div ng-if="!organizations.length">
+  <h1 crm-page-title>{{ts('Error')}}</h1>
+  <p>{{ts('Could not find an organization you have permission to administer.')}}</p>
+</div>
+<div ng-if="organizations.length">
+  <h1 crm-page-title>{{ts('Select an organization to administer')}}</h1>
+  <ul>
+    <li ng-repeat="org in organizations">
+      <a ui-sref="dash.org({id: org.contact_id})">{{org.display_name}}</a>
+    </li>
+  </ul>
+</div>

@@ -1,4 +1,10 @@
 (function(ts, $) {
+
+  // If no AngularJS route was specified, go to the root of the app.
+  if (!location.hash) {
+    location.hash = '/';
+  }
+
   // If AngularJS hasn't booted after five seconds (replacing the content of the
   // ui-view and hence removing the init message container from the DOM), it
   // probably isn't going to. Let's provide some kind of user feedback.

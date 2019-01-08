@@ -7,7 +7,25 @@
       $urlRouterProvider.when('/:id', '/:id/org');
 
       $stateProvider
-        // Abstract parent state for all pages; provides the page "chrome" and
+        .state('orgSelect', {
+          url: '/',
+          templateUrl: '~/orgdash/partials/OrgSelect.html',
+          controller: 'OrgSelectCtrl',
+          resolve: {
+            settings: function () {
+              return CRM.vars.orgdash;
+            },
+            organizations: function(RelatedContactService, settings) {
+              return RelatedContactService.findAdminableOrgs(settings.orgdash_contacts_relationship_types);
+            }
+          },
+          onEnter: function ($state, organizations) {
+            if (organizations.length === 1) {
+              return $state.target('dash.org', {id: organizations[0].contact_id});
+            }
+          }
+        })
+        // Abstract parent state for all dash pages; provides the page "chrome" and
         // universally needed resolves.
         .state('dash', {
           abstract: true,
