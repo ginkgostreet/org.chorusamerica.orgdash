@@ -61,12 +61,19 @@ classes (see `CRM_Orgdash_Permission::canSkipPermissionsCheck()`).
 
 ## Usage
 * Configure the extension by navigating to _Administer > System Settings >
-  Organization Dashboard_.
-* View an organization's dashboard by navigating to CiviCRM path
-  _/civicrm/orgdash/#/<organization_contact_id>_. The "access AJAX API"
-  permission is required to view the page. Contacts lacking permission to edit
-  the organization (via ACL, permissioned relationship, global permissions like
-  "edit all contacts," etc.) will be denied access.
+  Organization Dashboard_. Permission "administer CiviCRM" is required.
+* The "access AJAX API"  permission is required for all public-facing
+  organization dashboard pages.
+* A user may navigate to CiviCRM path __/civicrm/orgdash_ to visit her organizations'
+  dashboards. If she doesn't have any permissioned relationships, she will see a
+  message indicating she does't have permission to administer any organizations.
+  If she has a permissioned relationship with exactly one organization, she will
+  be redirected to /civicrm/orgdash/#/<organization_contact_id>/org. If she has
+  permissioned relationships with more than one organization, she will be
+  presented a menu to select the organization to administer.
+* Users visiting CiviCRM path _/civicrm/orgdash/#/<organization_contact_id>_ and
+  lacking permission to edit the organization (via ACL, permissioned relationship,
+  global permissions like "edit all contacts," etc.) will be denied access.
 * To add new contacts to the organization, the acting user should have the "add
   contacts" permission.
 
