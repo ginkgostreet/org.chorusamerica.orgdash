@@ -16,7 +16,7 @@
               return CRM.vars.orgdash;
             },
             organizations: function(RelatedContactService, settings) {
-              return RelatedContactService.findAdminableOrgs(settings.orgdash_contacts_relationship_types);
+              return RelatedContactService.findAdminableOrgs(settings.orgdash_contacts_relationship_types, settings.actingContactId);
             }
           },
           onEnter: function ($state, organizations) {

@@ -7,6 +7,9 @@ class CRM_Orgdash_Page_Angular extends CRM_Core_Page {
 
   public function run() {
     $this->exposeConfigurations();
+    CRM_Core_Resources::singleton()->addVars(E::SHORT_NAME, array(
+      'actingContactId' => CRM_Core_Session::singleton()->getLoggedInContactID(),
+    ));
 
     // See https://docs.civicrm.org/dev/en/latest/framework/angular/loader/#other-base-pages.
     $loader = new \Civi\Angular\AngularLoader();
