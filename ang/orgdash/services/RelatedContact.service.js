@@ -143,7 +143,7 @@
         const apiParams = [];
         const relationshipSides = ['a', 'b'];
         relationshipSides.forEach(contactRelSide => {
-          const orgContactSide = (contactRelSide === 'a' ? 'b' : 'a');
+          const orgRelSide = (contactRelSide === 'a' ? 'b' : 'a');
           const relParams = {
             is_active: 1,
             relationship_type_id: {IN: relTypes},
@@ -152,12 +152,12 @@
             },
             sequential: 1,
             'api.Contact.getsingle': {
-              contact_id: `$value.contact_id_${orgContactSide}`,
+              contact_id: `$value.contact_id_${orgRelSide}`,
               return: ['display_name', 'id']
             }
           };
           relParams[`contact_id_${contactRelSide}`] = contactId;
-          relParams[`is_permission_${contactRelSide}_${contactRelSide}`] = 1;
+          relParams[`is_permission_${contactRelSide}_${orgRelSide}`] = 1;
 
           apiParams.push(['Relationship', 'get', relParams]);
         });
