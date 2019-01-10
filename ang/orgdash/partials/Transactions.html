@@ -1,0 +1,29 @@
+<div crm-ui-debug="transactions" class="ng-isolate-scope"></div>
+
+<h2>{{ts('Transaction History')}}</h2>
+<table class="row-highlight">
+  <thead>
+    <tr>
+      <th>{{ts('Total Amount')}}</th>
+      <th>{{ts('Financial Type')}}</th>
+      <th>{{ts('Date Received')}}</th>
+      <th>{{ts('Status')}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="txn in transactions">
+      <td>{{formatMoney(txn.total_amount)}}</td>
+      <td>{{txn.financial_type_label}}</td>
+      <td>{{formatDate(txn.receive_date)}}</td>
+      <td>
+        {{txn.contribution_status_label}}
+        <div
+          class="orgdash-txn-recur"
+          crm-icon="fa-repeat"
+          ng-if="txn.next_recur_date">
+          {{ts('Recurs %d', {d: formatDate(txn.next_recur_date)})}}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

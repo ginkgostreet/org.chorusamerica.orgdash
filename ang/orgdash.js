@@ -131,6 +131,7 @@
     // Make utilities globally available in the app
     .run(function($rootScope) {
       $rootScope.formatDate = CRM.utils.formatDate;
+      $rootScope.formatMoney = CRM.formatMoney;
       $rootScope.ts = CRM.ts('orgdash');
     });
 })(angular, CRM.$, CRM._);
