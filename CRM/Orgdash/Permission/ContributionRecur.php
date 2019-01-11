@@ -15,6 +15,7 @@ class CRM_Orgdash_Permission_ContributionRecur implements CRM_Orgdash_Permission
       // request, we must first retrieve the result.
       $recurringContributions = civicrm_api3('ContributionRecur', 'get', array(
         'id' => ['IN' => $idsArr],
+        'options' => ['limit' => 0],
       ))['values'];
 
       $contactIds = array_column($recurringContributions, 'contact_id');

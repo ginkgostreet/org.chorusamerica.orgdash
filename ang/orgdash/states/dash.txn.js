@@ -5,7 +5,10 @@
     const contributionParams = {
       is_text: 0,
       sequential: 1,
-      options: {sort: 'receive_date DESC'},
+      options: {
+        limit: 0,
+        sort: 'receive_date DESC'
+      },
       'api.OptionValue.getvalue': {
         option_group_id: 'contribution_status',
         return: 'label',
@@ -28,6 +31,7 @@
       resolve: {
         financialTypes: function (crmApi) {
           return crmApi('FinancialAccount', 'get', {
+            options: {limit: 0},
             return: 'name',
             sequential: 1
           }).then(result => result.values);
@@ -51,6 +55,7 @@
               crmApi('ContributionRecur', 'get', {
                 contribution_status_id: 'In Progress',
                 id: {IN: recurIds},
+                options: {limit: 0},
                 sequential: 1
               }).then(recurResult => {
                 recurResult.values.forEach(recur => {

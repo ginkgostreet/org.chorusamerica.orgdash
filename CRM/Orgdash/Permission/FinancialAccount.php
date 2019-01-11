@@ -7,6 +7,7 @@ class CRM_Orgdash_Permission_FinancialAccount implements CRM_Orgdash_Permission_
    */
   public static function canSkipPermissionsCheck($entity, $action, $params) {
     $allowedParams = array(
+      'options' => ['limit' => 0],
       'return' => 'name',
       'sequential' => 1,
       // the following are added automatically by the client
