@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   angular.module('orgdash').config(function($stateProvider) {
-    $stateProvider.state('org-contact-error', {
+    $stateProvider.state('orgContactError', {
       templateUrl: '~/orgdash/partials/OrgContactError.html'
     });
   });

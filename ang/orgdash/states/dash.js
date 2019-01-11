@@ -34,7 +34,7 @@
       },
       onEnter: function ($state, orgContact) {
         if (orgContact.is_error === 1) {
-          return $state.target('org-contact-error');
+          return $state.target('orgContactError');
         }
       }
     });
