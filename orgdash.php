@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * This file contains civix-generated, boilerplate implementations of hooks which
+ * provide essential, generic wire-up/registration functions for extensions.
+ *
+ * Custom hook implementations are located in orgdash.hooks.php.
+ */
 require_once 'orgdash.civix.php';
-use CRM_Orgdash_ExtensionUtil as E;
+require_once 'orgdash.hooks.php';
 
 /**
  * Implements hook_civicrm_config().
@@ -132,31 +138,4 @@ function orgdash_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  */
 function orgdash_civicrm_entityTypes(&$entityTypes) {
   _orgdash_civix_civicrm_entityTypes($entityTypes);
-}
-
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- */
-function orgdash_civicrm_navigationMenu(&$menu) {
-  _orgdash_civix_insert_navigation_menu($menu, 'Administer/System Settings', array(
-    'label' => E::ts('Organization Dashboard'),
-    'name' => 'orgash_configure',
-    'url' => 'civicrm/admin/extensions/orgdash',
-    'permission' => 'administer CiviCRM',
-    'separator' => 0,
-  ));
-  _orgdash_civix_navigationMenu($menu);
-}
-
-/**
- * Implements hook_civicrm_alterAPIPermissions().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterAPIPermissions/
- */
-function orgdash_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
-  if (CRM_Orgdash_Permission::canSkipPermissionsCheck($entity, $action, $params)) {
-    $params['check_permissions'] = FALSE;
-  }
 }
