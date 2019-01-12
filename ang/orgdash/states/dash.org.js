@@ -9,6 +9,9 @@
         memberships: function(crmApi, orgId) {
           return crmApi('Membership', 'get', {
             contact_id: orgId,
+            options: {
+              return_contribution_page_id: 1
+            },
             sequential: 1,
             'api.MembershipStatus.getsingle': {
               id: '$value.status_id',

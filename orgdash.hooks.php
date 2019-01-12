@@ -21,6 +21,17 @@ function orgdash_civicrm_alterAPIPermissions($entity, $action, &$params, &$permi
 }
 
 /**
+ * Implements hook_civicrm_apiWrappers().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_apiWrappers/
+ */
+function orgdash_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if (CRM_Orgdash_APIWrapper_Membership::isQualifyingMembership($apiRequest)) {
+    $wrappers[] = new CRM_Orgdash_APIWrapper_Membership();
+  }
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu

@@ -6,6 +6,7 @@
       <th>{{ts('Start')}}</th>
       <th>{{ts('End')}}</th>
       <th>{{ts('Status')}}</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,15 @@
       <td>{{formatDate(membership.start_date)}}</td>
       <td>{{formatDate(membership.end_date)}}</td>
       <td>{{membership.status_label}}</td>
+      <td>
+        <a
+          ng-if="membership.contribution_page_id"
+          crm-icon="fa-repeat"
+          class="crm-hover-button"
+          href="{{contributeUrl(membership.contribution_page_id)}}">
+          {{ts('Renew')}}
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
