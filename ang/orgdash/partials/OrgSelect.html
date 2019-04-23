@@ -1,6 +1,10 @@
 <div ng-if="!organizations.length">
   <h1 crm-page-title>{{ts('Error')}}</h1>
-  <p>{{ts('Could not find an organization you have permission to administer.')}}</p>
+  <p>{{ts('You currently do not have an organization you have permission to administer. Likely causes:')}}</p>
+  <ul>
+  <li>{{ts('You are not logged in.')}}</li>
+  <li>{{ts("The site user account to which you are logged in, does not have permission to administer any organizations.")}}</li>
+</ul>
 </div>
 <div ng-if="organizations.length">
   <h1 crm-page-title>{{ts('Select an organization to administer')}}</h1>
