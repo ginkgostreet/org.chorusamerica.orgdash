@@ -81,7 +81,9 @@ classes (see `CRM_Orgdash_Permission::canSkipPermissionsCheck()`).
 TODO
 
 ## Known Issues
-TODO
+* phone numbers
+* primary
+* use of internal ACL class
 
 
 ## License
